@@ -1,0 +1,498 @@
+:root {
+  --point-color: #f99e17;
+  --sub-color:#5dbc45;
+}
+
+a,button {
+  transition-duration:0.2s;
+}
+
+@font-face {
+  font-family: 'SUIT-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body * {
+  font-family: 'SUIT-Regular', sans-serif;
+  font-size:17px;
+  color:#000;
+  }
+
+header {
+  height:56px;
+  padding:20px;
+  top:0;
+  left:0;
+  width:100%;
+  height:60px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+header svg {
+  width:120px;
+  fill: white;
+}
+section {
+  position:relative;
+}
+.bg-img1{
+  width:100%;
+}
+.bg-img2{
+  width:100%;
+}
+
+.btnbox {
+  position:absolute;
+  left:calc(50% - 265px);
+  top:200px;
+  text-align:center;
+  width:530px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.btnbox>div {
+}
+.btnbox-inner{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  gap:30px;
+}
+.btnbox .btn-upload,
+.btnbox .btn-exeution {
+  position:relative;
+  width:250px;
+  height:50px;                                                                           
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background-color:var(--point-color);
+  color:#fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius:10px;
+  cursor:pointer;
+}
+.btnbox>button:hover {
+  background:#f7b24a;
+}
+.btn-exeution{
+  background:var(--sub-color) !important;
+}
+.btn-exeution:hover{
+  background:#68d34d !important;
+}
+
+.btn-login{
+  width:100px;
+  height:40px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background-color:#fff;
+  color:var(--point-color);
+  border:1px solid var(--point-color);
+  border-radius:10px;
+  font-size:14px;
+  font-weight:bold;
+}
+.btn-login:hover {
+  background-color:var(--point-color);
+  color:#fff;
+}
+
+
+/*  */
+
+/* CSS */
+.popup-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.popup-container {
+  position: absolute;
+  top: 240px;
+  left: 10px;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 500px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  min-width: 400px; /* 최소 너비 설정 */
+  min-height:370px;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #eee;
+}
+
+.popup-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #202124;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #5f6368;
+  cursor: pointer;
+  padding: 4px;
+  min-width:38px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background-color: #f1f3f4;
+}
+
+.popup-content {
+  padding: 20px;
+}
+
+.upload-area {
+  border: 2px dashed #e8eaed;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  transition: border-color 0.2s;
+  height:250px;
+}
+
+.upload-area:hover {
+  border-color: var(--point-color);
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  margin-top:30px;
+}
+
+.upload-label svg {
+  color: var(--point-color);
+  margin-bottom: 8px;
+}
+
+.upload-label span {
+  color: #202124;
+  font-size: 16px;
+}
+
+.upload-label .sub-text {
+  color: #5f6368;
+  font-size: 14px;
+}
+
+.selected-file {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  display: none;
+}
+
+.file-name {
+  color: #202124;
+  font-size: 14px;
+}
+
+.upload-btn, .confirm-btn {
+  background: var(--point-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.upload-btn:hover, .confirm-btn:hover {
+  background: #f7b24a;
+}
+
+.cancel-btn {
+  background: #fff;
+  color: #5f6368;
+  border: 1px solid #dadce0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: background-color 0.2s;
+}
+
+.cancel-btn:hover {
+  background: #f1f3f4;
+}
+
+.execute-status {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: #e8eaed;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.progress {
+  width: 0%;
+  height: 100%;
+  background: var(--point-color);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.status-text {
+  color: #5f6368;
+  font-size: 14px;
+}
+
+.execute-options {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 드래그 앤 드롭 상태 */
+.upload-area.dragover {
+  border-color: var(--point-color);
+  background: rgba(249, 158, 23, 0.05);
+}
+.preview-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.file-name {
+  color: #5f6368;
+  font-size: 14px;
+  word-break: break-all;
+  text-align: center;
+  max-width: 90%;
+}
+
+/* ExecutePopup 관련 추가 스타일 */
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.project-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.project-item:hover {
+  background: #f1f3f4;
+}
+
+.project-title {
+  font-size: 16px;
+  color: #202124;
+  font-weight: 500;
+}
+
+.project-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-download, .btn-execute {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-download {
+  background: #fff;
+  color: #5f6368;
+  border: 1px solid #dadce0;
+}
+
+.btn-download:hover {
+  background: #f1f3f4;
+}
+
+.btn-execute {
+  background: var(--sub-color);
+  color: white;
+  border: none;
+}
+
+.btn-execute:hover {
+  background: #68d34d;
+}
+
+.ExecutePopup{
+  left:520px;
+}
+
+/* footer.css */
+.footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  padding: 40px 0;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.company-info {
+  flex: 1;
+  min-width: 300px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.company-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #343a40;
+}
+
+.business-number {
+  color: #495057;
+  font-size: 14px;
+}
+
+.address {
+  color: #495057;
+  font-size: 14px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.contact-info {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.label {
+  color: #495057;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.link {
+  color: #495057;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: #228be6;
+}
+
+.divider {
+  color: #dee2e6;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.footer-button {
+  background: none;
+  border: none;
+  color: #495057;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s ease;
+}
+
+.footer-button:hover {
+  color: #228be6;
+}
+
+footer {
+  text-align:center;
+}
