@@ -35,20 +35,19 @@ function App() {
   return (
     <>
       <Header />
-      
       <section>
         <div className="btnbox">
           <div className="btnbox-inner">
-            <div
+            <button
               className="btn-upload"
               onClick={(e) => handleUploadClick(e)}>
               이미지 업로드하기
-            </div>
-            <div
+            </button>
+            <button
               className="btn-exeution"
               onClick={handleExecuteClick}>
               실행하기
-            </div>
+            </button>
           </div>
           {isUploadOpen && (
               <UploadPopup

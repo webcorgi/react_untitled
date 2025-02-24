@@ -1,11 +1,17 @@
 :root {
   --point-color: #f99e17;
-  --sub-color:#5dbc45;
+  --sub-color:#45bcb2;
 }
 
 a,button {
   transition-duration:0.2s;
 }
+
+a:hover,
+button:hover {
+  filter:brightness(110%);
+}
+
 
 @font-face {
   font-family: 'SUIT-Regular';
@@ -84,28 +90,19 @@ section {
 .btn-exeution{
   background:var(--sub-color) !important;
 }
-.btn-exeution:hover{
-  background:#68d34d !important;
-}
 
-.btn-login{
-  width:100px;
-  height:40px;
+.btn-login {
   display:flex;
   justify-content:center;
   align-items:center;
   background-color:#fff;
-  color:var(--point-color);
-  border:1px solid var(--point-color);
-  border-radius:10px;
   font-size:14px;
-  font-weight:bold;
+  color:#333;
+  font-weight:700;
 }
 .btn-login:hover {
-  background-color:var(--point-color);
-  color:#fff;
+  text-decoration:underline;
 }
-
 
 /*  */
 
@@ -126,7 +123,7 @@ section {
 .popup-container {
   position: absolute;
   top: 240px;
-  left: 10px;
+  left: 0;
   transform: translate(-50%, -50%);
   width: 90%;
   max-width: 500px;
@@ -142,12 +139,12 @@ section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 24px;
+  padding: 5px 24px;
   border-bottom: 1px solid #eee;
 }
 
 .popup-header h2 {
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 600;
   color: #202124;
 }
@@ -170,12 +167,17 @@ section {
 
 .popup-content {
   padding: 20px;
+  height:288px;
+  overflow:auto;
+}
+.ExecutePopup  .popup-content {
+  height:321px;
 }
 
 .upload-area {
   border: 2px dashed #e8eaed;
   border-radius: 8px;
-  padding: 32px;
+  /* padding: 32px; */
   text-align: center;
   transition: border-color 0.2s;
   height:250px;
@@ -190,8 +192,9 @@ section {
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  height:100%;
   cursor: pointer;
-  margin-top:30px;
+  /* margin-top:30px; */
 }
 
 .upload-label svg {
@@ -379,12 +382,8 @@ section {
   border: none;
 }
 
-.btn-execute:hover {
-  background: #68d34d;
-}
-
 .ExecutePopup{
-  left:520px;
+  left:530px;
 }
 
 /* footer.css */
@@ -495,4 +494,90 @@ section {
 
 footer {
   text-align:center;
+}
+
+.popup-container {
+  width: 600px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.upload-status-bar {
+  padding: 8px 16px;
+  border-bottom: 1px solid #eee;
+  font-size: 12px;
+  color: #666;
+}
+.upload-status-bar span {
+  font-size:12px;
+}
+.separator {
+  margin: 0 8px;
+  color: #ddd;
+}
+
+.files-list {
+  padding: 16px;
+  max-height: 248px;
+  overflow-y: auto;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.file-preview {
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+}
+
+.thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.file-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-name {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.file-size {
+  font-size: 12px;
+  color: #666;
+}
+
+.remove-btn {
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: none;
+  color: #666;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background: #f5f5f5;
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border-radius: 8px;
+  cursor: pointer;
 }

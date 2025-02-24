@@ -1,50 +1,62 @@
 import { useEffect, useState, useRef } from 'react';
 
-
-
-const UploadPopup = ({  onClose, buttonPosition }) => {
-  const [fileName, setFileName] = useState('');
+const UploadPopup = ({ onClose, buttonPosition }) => {
+  const [files, setFiles] = useState([]);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [totalSize, setTotalSize] = useState(0);
   const fileInputRef = useRef(null);
   const popupRef = useRef(null);
-  const [preview, setPreview] = useState('');
 
-
-  const handleFileChange = (e) => {
-    if (e.target.files.length > 0) {
-      const file = e.target.files[0];
-      setFileName(file.name);
-
-      // 이미지 미리보기 생성
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+  // Calculate file size in readable format
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 KB';
+    const k = 1024;
+    const sizes = ['KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${(bytes / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`;
   };
 
+  // Handle file selection
+  const handleFileChange = (e) => {
+    const newFiles = Array.from(e.target.files);
+    addFiles(newFiles);
+  };
+
+  // Add files to state
+  const addFiles = (newFiles) => {
+    const updatedFiles = newFiles.map(file => ({
+      id: Math.random().toString(36).substring(7),
+      file,
+      preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null,
+      size: file.size
+    }));
+
+    setFiles(prev => [...prev, ...updatedFiles]);
+    calculateTotalSize([...files, ...updatedFiles]);
+  };
+
+  // Calculate total size of all files
+  const calculateTotalSize = (currentFiles) => {
+    const total = currentFiles.reduce((acc, file) => acc + file.size, 0);
+    setTotalSize(total);
+  };
+
+  // Remove file
+  const removeFile = (id) => {
+    setFiles(prev => {
+      const updatedFiles = prev.filter(file => file.id !== id);
+      calculateTotalSize(updatedFiles);
+      return updatedFiles;
+    });
+  };
+
+  // Handle drag and drop
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragOver(false);
-
-    if (e.dataTransfer.files.length > 0) {
-      const file = e.dataTransfer.files[0];
-      setFileName(file.name);
-
-      // 이미지 미리보기 생성
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-      
-      if (fileInputRef.current) {
-        fileInputRef.current.files = e.dataTransfer.files;
-      }
-    }
+    const newFiles = Array.from(e.dataTransfer.files);
+    addFiles(newFiles);
   };
-  
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -55,56 +67,82 @@ const UploadPopup = ({  onClose, buttonPosition }) => {
     setIsDragOver(false);
   };
 
+  // Cleanup previews on unmount
+  useEffect(() => {
+    return () => {
+      files.forEach(file => {
+        if (file.preview) {
+          URL.revokeObjectURL(file.preview);
+        }
+      });
+    };
+  }, [files]);
+
   return (
     <>
       <div className="popup-overlay" onClick={onClose}></div>
       <div className="popup-container popup-positioned" ref={popupRef}>
         <div className="popup-header">
-          <h2>이미지 업로드</h2>
+          <h2>파일 첨부</h2>
           <button className="close-btn" onClick={onClose}>&times;</button>
         </div>
+
+        <div className="upload-status-bar">
+          <span>일반 {formatFileSize(totalSize)}/10MB</span>
+          <span className="separator">|</span>
+          <span>대용량 0KB/2.00GB×10개</span>
+        </div>
+
         <div className="popup-content">
-          <div 
+          <div
             className={`upload-area ${isDragOver ? 'dragover' : ''}`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            <input 
-              type="file" 
-              id="fileInput" 
+            <input
+              type="file"
+              id="fileInput"
               ref={fileInputRef}
-              accept="image/*" 
-              hidden 
+              multiple
+              accept="image/*"
+              hidden
               onChange={handleFileChange}
             />
-            {!preview ? (
+            {files.length === 0 ? (
               <label htmlFor="fileInput" className="upload-label">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="17 8 12 3 7 8"></polyline>
-                  <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
-                <span>클릭하여 이미지 선택</span>
-                <span className="sub-text">또는 파일을 여기로 드래그하세요</span>
+                <span>파일을 마우스로 끌어 오세요</span>
               </label>
             ) : (
-              <div className="preview-container">
-                <img src={preview} alt="preview" className="image-preview" />
-                <p className="file-name">{fileName}</p>
+              <div className="files-list">
+                {files.map(file => (
+                  <div key={file.id} className="file-item">
+                    <div className="file-preview">
+                      {file.preview ? (
+                        <img src={file.preview} alt="preview" className="thumbnail" />
+                      ) : (
+                        <div className="file-icon">📄</div>
+                      )}
+                    </div>
+                    <div className="file-info">
+                      <span className="file-name">{file.file.name}</span>
+                      <span className="file-size">{formatFileSize(file.size)}</span>
+                    </div>
+                    <button 
+                      className="remove-btn"
+                      onClick={() => removeFile(file.id)}
+                    >
+                      삭제
+                    </button>
+                  </div>
+                ))}
               </div>
             )}
           </div>
-          {fileName && (
-            <div className="selected-file">
-              <span className="file-name">{fileName}</span>
-              <button className="upload-btn">업로드</button>
-            </div>
-          )}
         </div>
       </div>
     </>
   );
 };
 
-export default UploadPopup
+export default UploadPopup;
