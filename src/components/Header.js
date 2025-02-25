@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import LoginPopup from './LoginPopup';
+import { Link } from 'react-router-dom';
+import logo from '../img/logo.png'
 
 function Header() {
-  const [showLogin, setShowLogin] = useState(false);
     return (
-      <header>
-        <h1>ShiningPath</h1>
-        <button 
+      <header className="site-header">
+        <Link to="/main" className="logo">
+          <img src={logo} alt="logo" />
+        </Link>
+        <Link
+          to="/login"
           className="btn-login"
-          onClick={() => setShowLogin(true)}
         >
-          로그인</button>
-        {showLogin && <LoginPopup onClose={() => setShowLogin(false)} />}
+          로그인
+        </Link>
       </header>
     );
 }

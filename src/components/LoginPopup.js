@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const LoginPopup = ({ onClose }) => {
+const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -20,13 +20,12 @@ const LoginPopup = ({ onClose }) => {
   };
 
   return (
-    <>
-      <div className="login-overlay" onClick={onClose}></div>
-      <div className="login-popup">
-        <button className="close-button" onClick={onClose}>
-          ✕
-        </button>
-        
+    <div className="login-page">
+      <header className="site-header">
+        <h1>ShiningPass</h1>
+      </header>
+      
+      <div className="login-container">
         <div className="login-content">
           <div className="login-header">
             <h2>로그인</h2>
@@ -66,51 +65,43 @@ const LoginPopup = ({ onClose }) => {
       </div>
 
       <style jsx>{`
-        .login-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: rgba(0, 0, 0, 0.4);
+        .login-page {
+          min-height: 100vh;
           display: flex;
+          flex-direction: column;
+        }
+        
+        .site-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 16px 24px;
+          background-color: #fff;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .site-header h1 {
+          margin: 0;
+          color: #1a73e8;
+          font-size: 24px;
+        }
+        
+        .login-container {
+          display: flex;
+          flex-direction: column;
           align-items: center;
           justify-content: center;
-          z-index: 1000;
+          flex: 1;
+          padding: 24px;
         }
 
-        .login-popup {
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+        .login-content {
           background: white;
           border-radius: 8px;
           padding: 48px 40px 36px;
           width: 100%;
           max-width: 450px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-          z-index: 1001;
-        }
-
-        .close-button {
-          position: absolute;
-          top: 16px;
-          right: 16px;
-          background: none;
-          border: none;
-          font-size: 20px;
-          color: #5f6368;
-          cursor: pointer;
-          padding: 8px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .close-button:hover {
-          background-color: #f1f3f4;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .login-header {
@@ -191,8 +182,8 @@ const LoginPopup = ({ onClose }) => {
           background-color: #1557b0;
         }
       `}</style>
-    </>
+    </div>
   );
 };
 
-export default LoginPopup;
+export default LoginPage;
